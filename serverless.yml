@@ -1,0 +1,69 @@
+service: all-star
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: us-east-1
+  environment:
+    STRIPE_KEY: ${file(.env.yml):STRIPE_KEY}
+    PRICE_ID_SUB: ${file(.env.yml):PRICE_ID_SUB}
+    DB_URL: ${file(.env.yml):DB_URL}
+    STRIPE_WEBHOOK_SECRET: ${file(.env.yml):STRIPE_WEBHOOK_SECRET}
+    STRIPE_WEBHOOK_PATH: ${file(.env.yml):STRIPE_WEBHOOK_PATH}
+functions:
+  getCustomer:
+    handler: handlers/stripe.getCustomer
+    description: retrieve stripe customer detail
+    events:
+      - http:
+          cors: true
+          path: customers/{id}
+          method: get
+  createSubscription:
+    handler: handlers/stripe.createSubscription
+    description: creates stripe subscription for a given user email
+    events:
+      - http:
+          cors: true 
+          path: subscriptions/
+          method: post
+  deleteSubscription:
+    handler: handlers/stripe.deleteSubscription
+    description: deletes a given stripe subscription
+    events:
+      - http:
+          cors: true 
+          path: subscriptions/{id}
+          method: delete
+  createWebhook:
+    handler: handlers/stripe.createWebhook
+    description: creates stripe webhook
+    events:
+      - http:
+          cors: true 
+          path: webhooks/
+          method: post
+  processWebhook:
+    handler: handlers/stripe.processWebhook
+    description: processes received stripe webhook
+    events:
+      - http:
+          cors: true 
+          path:  secret-webhook
+          # path:  ${env:STRIPE_WEBHOOK_PATH}
+          method: post
+  updateSubscriptionStatus:
+    handler: handlers/user.subscriptionStatus
+    description: sets the subscription status for a user. Not recommended
+    events:
+      - http:
+          cors: true 
+          path:  user/
+          method: post
+  getUserLogs:
+    handler: handlers/user.userLog
+    description: gets a user's transaction logs
+    events:
+      - http:
+          cors: true 
+          path:  user/{id}/logs/
+          method: get

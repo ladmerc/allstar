@@ -1,0 +1,23 @@
+{
+  "name": "allstar",
+  "version": "1.0.0",
+  "description": "",
+  "main": "config.js",
+  "engines": {
+    "node": ">=12.18.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "await-to-js": "^3.0.0",
+    "mongoose": "^5.12.13",
+    "stripe": "^8.154.0"
+  },
+  "devDependencies": {
+    "serverless": "^2.46.0"
+  }
+}
